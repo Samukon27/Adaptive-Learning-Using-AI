@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Management</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Course Management</h2>
+        
+        <!-- Button to trigger the modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#courseModal">
+            Add Lecture
+        </button>
+
+        <!-- Table to display courses -->
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Lecture Name</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="courseTableBody">
+                <!-- Course data will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for adding courses -->
+    <div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-labelledby="courseModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="courseModalLabel">Add Lecture</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form for submitting courses -->
+                    <form id="courseForm">
+                        <div class="form-group">
+                            <label for="courseName">Lecture Name:</label>
+                            <input type="text" class="form-control" id="courseName" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="addCourseButton">Add Lecture</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- Include course.js script at the end -->
+    <script src="course.js"></script>
+</body>
+</html>

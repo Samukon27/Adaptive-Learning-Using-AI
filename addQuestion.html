@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Question</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Add Question</h2>
+
+        <!-- Form for adding questions -->
+        <form id="addQuestionForm">
+            <div class="form-group">
+                <label for="questionText">Question Text:</label>
+                <input type="text" class="form-control" id="questionText" required>
+            </div>
+            <div class="form-group">
+                <label for="questionType">Question Type:</label>
+                <select class="form-control" id="questionType" required>
+                    <option value="" selected disabled>Select Question Type</option>
+                    <option value="MCQ">Multiple Choice Question (MCQ)</option>
+                    <option value="Match">Match</option>
+                    <option value="Problem">Problem</option>
+                </select>
+            </div>
+            <div id="additionalFormContainer">
+                <!-- Additional form elements based on question type will be dynamically added here -->
+            </div>
+            <button type="submit" class="btn btn-primary">Add Question</button>
+        </form>
+    </div>
+
+    <!-- Include jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!-- Include addQuestion.js script at the end -->
+    <script src="addQuestion.js"></script>
+</body>
+
+</html>
