@@ -7,6 +7,32 @@
     <title>Add Question</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Include custom styles for the difficulty slider -->
+    <style>
+        .custom-slider {
+            width: 80%;
+            margin: auto;
+        }
+
+        .custom-slider label {
+            font-size: 14px;
+            text-align: center;
+            width: 20%;
+            display: inline-block;
+        }
+
+        .custom-slider input[type="range"] {
+            width: 60%;
+            display: inline-block;
+        }
+
+        .difficulty-value {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px black; /* Add black outline */
+        }
+    </style>
 </head>
 
 <body>
@@ -28,11 +54,33 @@
                     <option value="Problem">Problem</option>
                 </select>
             </div>
+            <div class="form-group">
+                <label for="difficulty">Difficulty:</label>
+                <div>
+                    <input type="range" class="form-control-range" id="difficulty" min="1" max="5" step="1" value="3">
+                    <span class="difficulty-value">3</span>
+                </div>
+            </div>
             <div id="additionalFormContainer">
                 <!-- Additional form elements based on question type will be dynamically added here -->
             </div>
             <button type="submit" class="btn btn-primary">Add Question</button>
         </form>
+
+        <!-- Table to display questions for the topic -->
+        <h3 class="mt-4">Questions for the Topic</h3>
+        <table class="table mt-2" id="questionTable">
+            <thead>
+                <tr>
+                    <th scope="col">Question Text</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Difficulty</th>
+                </tr>
+            </thead>
+            <tbody id="questionTableBody">
+                <!-- Questions for the topic will be dynamically added here -->
+            </tbody>
+        </table>
     </div>
 
     <!-- Include jQuery and Bootstrap JS -->
@@ -41,6 +89,31 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <!-- Include addQuestion.js script at the end -->
     <script src="addQuestion.js"></script>
+
+    <script>
+        // Update difficulty value display dynamically
+        $(document).ready(function () {
+            $('#difficulty').on('input', function () {
+                var difficultyValue = $(this).val();
+                var difficultyDisplay = $('.difficulty-value');
+                
+                // Set the text color and outline based on the difficulty level
+                difficultyDisplay.text(difficultyValue);
+                var color = getColorForDifficulty(difficultyValue);
+                difficultyDisplay.css({
+                    'color': color,
+                    'text-shadow': '1px 1px 1px black'
+                });
+            });
+
+            // Function to get color based on difficulty level
+            function getColorForDifficulty(difficulty) {
+                // Assuming green for easy (1) and red for hard (5)
+                var hue = (5 - difficulty) * 30; // Scale hue from 60 (red) to 300 (green)
+                return 'hsl(' + hue + ', 100%, 50%)';
+            }
+        });
+    </script>
 </body>
 
 </html>

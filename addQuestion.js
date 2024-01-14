@@ -17,6 +17,7 @@ $(document).ready(function () {
         var questionText = $('#questionText').val();
         var questionType = $('#questionType').val();
         var additionalFormData = getAdditionalFormData();
+        var difficulty = $('#difficulty').val();
 
         if (!questionText || !questionType) {
             alert('Please provide both question text and type.');
@@ -27,12 +28,13 @@ $(document).ready(function () {
             questionText: questionText,
             questionType: questionType,
             courseId: courseId,
-            additionalFormData: additionalFormData
+            additionalFormData: additionalFormData,
+            difficulty: difficulty
         };
 
         $.ajax({
             type: 'POST',
-            url: 'question.php?action=add_question',
+            url: 'addQuestion.php',
             data: JSON.stringify(newQuestion),
             contentType: 'application/json',
             success: function (response) {
@@ -43,11 +45,16 @@ $(document).ready(function () {
                 } else {
                     // Clear the form
                     $('#questionText').val('');
-                    $('#questionType').val(''); // Reset the question type dropdown
-                    $('#additionalFormContainer').empty(); // Clear additional form elements
+                    $('#questionType').val('');
+                    $('#additionalFormContainer').empty();
+                    $('#difficulty').val('3');
+                    $('.difficulty-value').text('3');
 
                     // Display a success message or perform any other actions
                     alert('Question added successfully!');
+
+                    // Fetch and update questions for the topic
+                    fetchQuestions();
                 }
             },
             error: function (error) {
@@ -62,10 +69,8 @@ $(document).ready(function () {
         var additionalFormData = {};
 
         if (questionType === 'MCQ') {
+            additionalFormData.correctChoice = $('input[name="correctChoice"]:checked').val();
             additionalFormData.choices = [];
-            $('input[name="correctChoice"]:checked').each(function () {
-                additionalFormData.correctChoice = $(this).val();
-            });
             $('[id^="choice"]').each(function () {
                 additionalFormData.choices.push($(this).val());
             });
@@ -87,10 +92,9 @@ $(document).ready(function () {
     function updateAdditionalForm() {
         var questionType = $('#questionType').val();
         var additionalFormContainer = $('#additionalFormContainer');
-        additionalFormContainer.empty(); // Clear previous additional form elements
+        additionalFormContainer.empty();
 
         if (questionType === 'MCQ') {
-            // For MCQ type, add text boxes for choices with radio buttons
             for (var i = 1; i <= 4; i++) {
                 var choiceLabel = 'Choice ' + i + ':';
                 var choiceId = 'choice' + i;
@@ -103,7 +107,6 @@ $(document).ready(function () {
                 additionalFormContainer.append(choiceFormGroup);
             }
         } else if (questionType === 'Match') {
-            // For Match type, add pairs of text boxes
             for (var j = 1; j <= 4; j++) {
                 var leftLabel = 'Left ' + j + ':';
                 var rightLabel = 'Right ' + j + ':';
@@ -120,7 +123,6 @@ $(document).ready(function () {
                 additionalFormContainer.append(matchFormGroup);
             }
         } else if (questionType === 'Problem') {
-            // For Problem type, add a text box for the final answer
             var answerFormGroup = $('<div class="form-group"></div>');
             answerFormGroup.append('<label for="finalAnswer">Final Answer:</label>');
             answerFormGroup.append('<input type="text" class="form-control" id="finalAnswer" required>');
@@ -128,4 +130,46 @@ $(document).ready(function () {
             additionalFormContainer.append(answerFormGroup);
         }
     }
+
+    // Function to fetch and update questions for the topic
+    function fetchQuestions() {
+        $.ajax({
+            type: 'GET',
+            url: 'addQuestion.php?topicId=' + courseId,
+            success: function (response) {
+                console.log(response);
+
+                if (Array.isArray(response)) {
+                    updateQuestionTable(response);
+                } else {
+                    console.error('Invalid response format. Expected an array:', response);
+                }
+            },
+            error: function (error) {
+                console.error('Error fetching questions:', error.responseText);
+            }
+        });
+    }
+
+    // Function to update the question table
+    function updateQuestionTable(questions) {
+        $('#questionTableBody').empty();
+
+        for (var i = 0; i < questions.length; i++) {
+            var question = questions[i];
+
+            var row = '<tr>';
+            row += '<td>' + question.questionText + '</td>';
+            row += '<td>' + question.type + '</td>';
+            row += '<td>' + question.difficulty + '</td>';
+            row += '</tr>';
+
+            $('#questionTableBody').append(row);
+        }
+    }
+
+    // Initial call to update additional form on page load
+    updateAdditionalForm();
+    // Initial call to fetch and update questions for the topic on page load
+    fetchQuestions();
 });
